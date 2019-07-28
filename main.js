@@ -1,104 +1,119 @@
 const Discord = require('discord.js');
-const bot = new Discord.Client();
 const fs = require('fs');
+const DBL = require("dblapi.js");
 
-var express = require('express')
-var app = express()
+// Module
+require('./modules/web/main.js').start();
 
-bot.version = "1.1"
+// Definitionen
+const bot = new Discord.Client();
+const dbl = new DBL(process.env.DBL_TOKEN, bot);
+
+// Bot einloggen lassen
+console.log("[STATUS] Einloggen...")
+bot.login(process.env.TOKEN)
+.catch((err) => {
+  console.log("Huh, wir konnten uns wohl nicht anmelden :/\nVielleicht ist dieses Glitch-Projekt gerade IP-Banned von Discord. Wer weiß?");
+  console.error(err);
+});
+
+// Sachen, die ich global benutzen will
+bot.afk = [];
+bot.modules = [];
+bot.version = "1.1";
 bot.settings = require('./einstellungen.json');
-bot.logger = require('./modules/logger.js')
+bot.db = require('./modules/db.js');
+bot.commands = new Discord.Collection();
+bot.aliases = new Discord.Collection();
+bot.modules.dbl = dbl;
 
+// Event/Command-Handler
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
   files.forEach(file => {
-    // If the file is not a JS file, ignore it (thanks, Apple)
     if (!file.endsWith(".js")) return;
-    // Load the event file itself
     const event = require(`./events/${file}`);
-    // Get just the event name from the file name
     let eventName = file.split(".")[0];
-    // super-secret recipe to call events with all their proper arguments *after* the `client` var.
-    // without going into too many details, this means each event will be called with the client argument,
-    // followed by its "normal" arguments, like message, member, etc etc.
-    // This line is awesome by the way. Just sayin'.
     bot.on(eventName, event.bind(null, bot));
     delete require.cache[require.resolve(`./events/${file}`)];
   });
+  console.log("[DATEIEN] "+files.length + " Events geladen")
 });
 
-bot.commands = new Discord.Collection();
-
-fs.readdir("./commands/", (err, files) => {
+// Command-Handler
+fs.readdir("./commands/", (err, categories) => {
   if (err) return console.error(err);
-  files.forEach(file => {
-    if (!file.endsWith(".js")) return;
-    // Load the command file itself
-    let props = require(`./commands/${file}`);
-    // Get just the command name from the file name
-    let commandName = file.split(".")[0];
-    console.log(`[CMD][LOAD] ${commandName}`);
-    // Here we simply store the whole thing in the command Enmap. We're not running it right now.
-    bot.commands.set(props.help.name, props);
+  categories.forEach(category => {
+    if(category === "disabled") return;
+    fs.readdir("./commands/"+category+"/", (err, files) => {
+      if (err) return console.error(err);
+      files.forEach(file => {
+        if (!file.endsWith(".js")) return;
+        let props = require(`./commands/${category}/${file}`);
+        
+        if(!props.info) props.info = {};
+        props.help.kategorie = category;
+        props.help.name = file.split(".")[0];
+        
+        bot.commands.set(file.split(".")[0], props);
+        if(props.help.aliases) {
+          props.help.aliases.forEach(alias => {
+            bot.aliases.set(alias, props);
+          });
+        };
+      });
+    });
   });
 });
 
-bot.quickEmbed = function(desc, color){
- 
-  const embed = new Discord.RichEmbed();
-  embed.setDescription(desc)
-  embed.setColor(color)
-  embed.setTimestamp(new Date())
-  
-  return embed;
-  
-}
-
-
-
-
-bot.login(process.env.TOKEN);
-
-
-
-app.get('/', function (req, res) {
-  var jokelist = [
-    "It works? Don't touch it.",
-    "$ life<br>life: not found",
-    '<img src="https://i.redd.it/uz19pcf5nk021.png">',
-    '<img src="https://i.redd.it/d9ko19a7sk021.png">',
-    "$ show scriptThatIJustWrote<br>Couldn't find the script that you just wrote.<br><br>$"
-                ]
-  
-  res.send(jokelist[Math.floor(Math.random()*jokelist.length)])
-})
-
-app.listen(process.env.PORT)
-
-
+// Andere Sachen, die ich auch global benutzen will
 bot.statusChecker = (status) => {
   switch(status) {
     case "dnd":
-      return "<:dnd:526788572796420096>"
+      return "<:dnd:561580620870844417>"
       break;
     case "idle":
-      return "<:afk:526788571785330688>"
+      return "<:afk:561580620816449538>"
       break;
     case "online":
-      return "<:online:526788572238577667>"
+      return "<:online:561580620585893920>"
       break;
     case "offline":
-      return "<:offline:526788568853774359>"
+      return "<:off:561580620740952076>"
       break;
-      
-               }
+    default:
+      return undefined;
+      break;
+    }
+}
+exports.getUser = () => {
+  return bot.users.size
+}
+exports.getServer = () => {
+ return bot.guilds.size 
+}
+exports.getChannels = () => {
+ return bot.channels.size 
+}
+exports.getUptime = () => {
+  if(!bot.uptime) return "0ms"
+  return require('ms')(bot.uptime)
+}
+ exports.getBot = () => {
+  return bot;
 }
 
-// database stuff
-const low = require('lowdb')
-const FileSync = require('lowdb/adapters/FileSync')
+// Warum auch immer das hier existiert: 
+// Das ist ein QuickEmbed, was du schnell irgendwo definieren kannst.
 
-const adapter = new FileSync('.secret/db.json')
-const db = low(adapter)
+bot.quickEmbed = function(desc, color){
+ 
+    const embed = new Discord.RichEmbed();
+    embed.setDescription(desc)
+    embed.setColor(color)
+    embed.setTimestamp(new Date())
+    
+    return embed;
+    
+};
 
-db.defaults({ servers:[]}).write();

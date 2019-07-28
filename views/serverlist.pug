@@ -1,0 +1,19 @@
+html
+  head
+    meta(name="viewport", content="width=device-width, initial-scale=1.00")
+    meta(charset="utf-8")
+    link(rel='stylesheet', href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css", integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS", crossorigin="anonymous")
+    link(rel='stylesheet', href='/style.css')
+    meta(property='og:description' content='Ein kleiner Discord-Bot.')
+    meta(property='og:title' content='justBot();')
+    title="justBot(); | ein Discord-Bot"
+    
+  body
+    include navbar.pug
+    center
+      script="window.location.href = '/static/r.mp4'"
+      h1 Server, auf denen justBot(); ist <div style="display:inline;font-size:25%;">(#{servers.length})</div>
+      each server in servers
+        img(src=server.imgurl class="circle" width="25px" height="25px" style="display: inline;")
+        | &nbsp;#{server.name} 
+        br

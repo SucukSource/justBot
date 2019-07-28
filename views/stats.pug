@@ -1,0 +1,74 @@
+html
+  head
+    meta(name="viewport", content="width=device-width, initial-scale=1.00")
+    meta(charset="utf-8")
+    link(rel='stylesheet', href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css", integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS", crossorigin="anonymous")
+    link(rel='stylesheet', href='/style.css')
+    link(rel='stylesheet', href='/stats.css')
+    meta(property='og:description' content='Ein kleiner Discord-Bot.')
+    meta(property='og:title' content='justBot();')
+    title="justBot(); | ein Discord-Bot"
+  body
+    include navbar.pug
+    .container
+      center
+        if user
+          img(src=user.avatar class="circle" width="128" height="128")
+          h2 #{user.name}
+          .block
+            h5 Discord gejoint am 
+            p #{user.erstellt}
+          if user.game
+            .block
+              h5 Spielt
+              p #{user.game}
+          if user.lastMsg
+            .block
+              h5 Letzte Nachricht
+              p #{user.lastMsg}
+          br
+          .block
+            h5 Mute im Globalchat?
+            p #{user.globalchatmute}
+          .block
+            h5 Vom Bot gebannt?
+            p #{user.botbanned}
+        else if guild
+          img(src=guild.icon class="circle" width="128" height="128")
+          h2=guild.name
+          .block
+            h5 Member
+            p=guild.members
+          .block
+            h5 Channels
+            p=guild.channels
+          .block
+            h5 Owner
+            img(src=guild.owner.user.avatarURL class="circle" width="32" height="32")
+            | &nbsp; #{guild.owner.user.tag}
+          br
+          .block
+            h5 Erstellt am
+            p=guild.erstellt
+          .block
+            h5 Invite
+            a(href=guild.invite) #{guild.invite}
+        else if gstats
+          h1 Stats
+          .block
+            h5 Command-Uses
+            p=gstats.uses
+          .block
+            h5 Server
+            p=gstats.server
+          .block
+            h5 User
+            p=gstats.user
+          .block
+            h5 Uptime
+            p=gstats.uptime
+        if error
+          | </center>
+          h3 :(
+          p Ein Fehler ist aufgetreten.
+          div(style="font-family:monospace;")=error

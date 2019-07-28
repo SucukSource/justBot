@@ -1,8 +1,32 @@
 {
- 
   "teammitglieder":["413228224026378241",
                   "137228543045140480",
-                    "419231933155770369"],
-  "owner":"137228543045140480"
+                    "419231933155770369",
+                    "308645947112685571"],
+  "owner":"137228543045140480",
+  "maintenance": false,
+  "spielt":[ 
+      "auf $SERVER Server|||PLAYING",
+      "$USER User an|||WATCHING",
+      "in $CHANNEL Kanäle|||WATCHING",
+      "@everyone|||LISTENING",
+      "Windows Update zu|||WATCHING",
+      "dich an|||WATCHING",
+      "YouTube|||WATCHING",
+      "Netflix mit justSmile();|||WATCHING",
+      "Minecraft|||PLAYING",
+      "Fortnite|||PLAYING",
+      "Scribblenauts Unlimited|||PLAYING",
+      "Krazy Ken Tech Misadventures|||WATCHING",
+      "Artikel 13 komisch an|||WATCHING",
+      "Spotify|||LISTENING",
+      "SoundCloud|||LISTENING",
+      "Deezer|||LISTENING",
+      "JavaScript Tutorials|||WATCHING",
+      "auf Discord|||PLAYING",
+      "League of Legends|||PLAYING",
+      "Premiere Tutorials|||WATCHING",
+      "DayMusic|||LISTENING"
+    ]
   
 }

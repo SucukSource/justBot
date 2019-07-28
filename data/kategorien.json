@@ -1,0 +1,26 @@
+[
+  {
+    "displayName": "⚪ Allgemein",
+    "name": "allgemein"
+  },
+  {
+    "displayName": "🛡 Moderation",
+    "name": "moderation"
+  },
+  {
+    "displayName": "😂 Spaß",
+    "name": "fun"
+  },
+  {
+    "displayName": "🔊 Musik",
+    "name": "musik"
+  },
+  {
+    "displayName": "❓ Anderes",
+    "name": "anderes"
+  },
+  {
+    "displayName": "🛠 Einstellungen",
+    "name": "einstellungen"
+  }
+]

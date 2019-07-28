@@ -1,0 +1,35 @@
+body {
+  background-color: #353535;
+  color: #EEEEEE;
+  animation: fadein 1s ease-in-out;
+}
+
+.circle {
+    border-radius: 50%;
+    animation: fadein 2s;
+}
+
+a:link {
+	color:#4db8ff;
+}
+a:visited {
+	color:#4db8ff;
+}
+
+.nvbr {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.nvbr-item {
+  display: inline;
+  float: left;
+}
+.nvbr-link {
+  display: block;
+  color: white;
+  text-align:center;
+  padding: 10px 7px;
+  text-decoration: none;
+}

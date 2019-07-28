@@ -1,23 +1,37 @@
+const hum = require('humanize-number')
 module.exports = (bot) => {
-    bot.activity_list = [
-    `auf {bot.guilds.size} Server`,
-    `${bot.users.size} User an`,
-    `in ${bot.channels.size} Kanäle`,
-    `seit 2018`
-    ]
-    bot.user.setPresence({ game: { 
-                                type: 'WATCHING', 
-                                name: "nichts"+` | ,help` }, 
-                        status: 'idle' })
+
+      
+      bot.user.setPresence({ game: { 
+                                  type: 'WATCHING', 
+                                  name: "mir beim Restarten zu.."}, 
+                          status: 'idle' })
+    
+    setInterval(() => {
+      if(bot.settings.maintenance)     
+        return bot.user.setPresence({ 
+            game: { 
+                name: `Maintenance` 
+            }, 
+            status: 'dnd' 
+        });
+
+      setPresence(bot);
+      }, 30000);
+    
+    console.log("[STATUS] Eingeloggt. Ich bin bereit für Befehle!")
+    
+  }
   
-  setInterval(() => {
-        const index = Math.floor(Math.random() * (bot.activity_list.length - 1) + 1);
-    bot.user.setPresence({ game: { 
-                                type: 'WATCHING', 
-                                name: bot.activity_list[index]+` | ,help` }, 
-                        status: 'idle' })
-    }, 30000);
-  
-  console.log("---- Bot on")
-  
-}
+  function setPresence(bot) {
+    const index = Math.floor(Math.random() * (bot.settings.spielt.length - 1) + 1);
+    const type = bot.settings.spielt[index].split("|||")[1]
+    const game = bot.settings.spielt[index].split("|||")[0].replace('$USER', hum(bot.users.size)).replace('$SERVER', hum(bot.guilds.size)).replace('$CHANNEL', hum(bot.channels.size))
+    console.log("[INFO] Status geändert: "+type.toLowerCase()+" "+game+` | ,help`)  
+    bot.user.setPresence({ 
+          game: { 
+              type: type, 
+              name: game+` | ,help` }, 
+          status: 'idle'  
+        })
+  }

@@ -1,0 +1,25 @@
+html
+  head
+    meta(name="viewport", content="width=device-width, initial-scale=1.00")
+    meta(charset="utf-8")
+    link(rel='stylesheet', href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css", integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS", crossorigin="anonymous")
+    link(rel='stylesheet', href='/home.css?ver=1')
+    link(rel='stylesheet', href='/style.css')
+    meta(property='og:description' content='Ein kleiner Discord-Bot.')
+    meta(property='og:title' content='justBot();')
+    title="justBot(); | ein Discord-Bot"
+    
+  body
+    include navbar.pug
+    .container    
+      center
+        img(class="circle", src="https://cdn.glitch.com/44f2cc07-219b-4eed-a947-ae911ea8cc34%2FjustBot()%3B.png?1548430086850", width=128)
+        br
+        .text
+          a(href="https://discordapp.com/oauth2/authorize?client_id=505024018961661953&scope=bot&permissions=19456") Einladen</a> | 
+          a(href="https://discordbots.org/bot/505024018961661953/vote") Voten</a> | 
+          a(href="https://discord.gg/vaFYuhg") Support-Server
+          p(style='color: #737373') #{user} User in #{channel} Kanäle auf #{server} Server.
+          p(style='color: #737373') Letzter Restart vor #{uptime}
+        .status
+          img(src="https://discordbots.org/api/widget/505024018961661953.svg?topcolor=353535&middlecolor=353535&datacolor=fff&labelcolor=669999")
